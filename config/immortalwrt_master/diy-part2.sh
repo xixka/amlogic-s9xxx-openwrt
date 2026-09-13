@@ -45,6 +45,14 @@ fi
 
 # ------------------------------- Additional customizations -------------------------------
 #
+# Disable USB scatter-gather for the mt76-usb driver (module parameter of usb.c:
+# mt76u_check_sg()). Prevents mt76x2u firmware hangs (mt76x02u_mcu_wait_resp
+# failed with -110) under high traffic on Amlogic N1. The files/ overlay is
+# copied into the final rootfs and overwrites the file shipped by kmod-mt76-usb.
+rm -rf files/etc/modules.d/mt76-usb
+mkdir -p files/etc/modules.d
+echo "mt76-usb disable_usb_sg=1" >files/etc/modules.d/mt76-usb
+#
 # Add luci-app-amlogic
 rm -rf package/luci-app-amlogic
 git clone -b main https://github.com/ophub/luci-app-amlogic.git package/luci-app-amlogic
